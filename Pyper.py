@@ -3,8 +3,10 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import wget
 import requests
+import pyfiglet
 import tweepy
 import os
+from PIL import Image
 
 def main():
     url = 'https://www.reddit.com/r/wallpapers'
@@ -78,24 +80,38 @@ def subUrl(sub_url):
 def reName():
     i = 0
     for fileName in os.listdir('.'): 
-        dst = str(i) + ".jpg" 
+        dst = str(i) + ".jpg"
         if (".py" in fileName)or(os.path.exists(dst)):
             pass
         else:
             os.rename(fileName, dst)
+            print(fileName+" has been renamed to "+dst+" !")   
         i += 1
     
-
+def reRes():
+    i = 0
+    for fileName in os.listdir('.'): 
+        dst = str(i) + ".jpg"
+        if (".py" in fileName):
+            pass
+        else:
+            im = Image.open(dst)
+            im.save(dst, dpi=(600,600))
+            print(dst+" resolution has been changed!")
+        i += 1
+        
     
 def share():
-    auth = tweepy.OAuthHandler("TWITTER KEY", "TWITTER KEY")
-    auth.set_access_token("TWITTER KEY","TWITTER KEY")
+    auth = tweepy.OAuthHandler("", "")
+    auth.set_access_token("","")
     api = tweepy.API(auth)
+    
     for i in range(100):
+        dst = str(i)+".jpg"
         try:
-          api.update_with_media(str(i)+".jpg")
-          print("Shared : "+str(i)+".jpg")
-          os.remove(str(i)+".jpg")
+          api.update_with_media(dst)
+          print(dst+" has been shared!")
+          os.remove(dst)
         except:    
           pass
     
@@ -108,8 +124,9 @@ def lastMessage():
 
 
 main()
-otherWebSite()
+#otherWebSite()
 reName()
+reRes()
 share()
 lastMessage()
 
